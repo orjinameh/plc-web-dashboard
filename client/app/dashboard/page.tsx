@@ -5,6 +5,7 @@ import { connectWebSocket, disconnectWebSocket, type PlcData } from '@/lib/webso
 import StatusCard from '@/components/StatusCard'
 import RealtimeChart from '@/components/RealtimeChart'
 import AlarmTable from '@/components/AlarmTable'
+import Link from 'next/link'
 
 type DataPoint = {
   time: string
@@ -82,11 +83,19 @@ export default function Dashboard() {
           </h1>
           <p className="text-sm text-gray-500">Real-time industrial process monitoring</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className={`h-3 w-3 rounded-full ${connected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-          <span className={`text-sm font-medium ${connected ? 'text-green-600' : 'text-red-600'}`}>
-            {connected ? 'Connected' : 'Disconnected'}
-          </span>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/history"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
+          >
+            📊 View History
+          </Link>
+          <div className="flex items-center gap-2">
+            <div className={`h-3 w-3 rounded-full ${connected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+            <span className={`text-sm font-medium ${connected ? 'text-green-600' : 'text-red-600'}`}>
+              {connected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
         </div>
       </div>
 

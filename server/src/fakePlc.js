@@ -1,9 +1,12 @@
 const { broadcast } = require('./websocket')
+const { PlcData } = require('./db')
 
 let itemCount = 0
+let saveCounter = 0
 
-const generateFakeData = () => {
+const generateFakeData = async () => {
   itemCount++
+  saveCounter++
 
   const data = {
     temperature: +(20 + Math.random() * 10).toFixed(1),
@@ -25,7 +28,19 @@ const generateFakeData = () => {
     data.alarms.push('LOW_PRESSURE')
   }
 
+  // Broadcast to dashboard
   broadcast(data)
+
+  // Save to MongoDB every 10 seconds
+  if (saveCounter >= 10) {
+    saveCounter = 0
+    try {
+      await new PlcData(data).save()
+      console.log('Saved to MongoDB!')
+    } catch (error) {
+      console.error('Failed to save:', error)
+    }
+  }
 }
 
 const startFakePlc = () => {
