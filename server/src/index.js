@@ -41,7 +41,7 @@ server.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`)
     await connectDB()
     initWebSocket(server)
-    //startModbus()
+    startModbus()
     // Replace startModbus() with:
-    startFakePlc()
+    // startFakePlc()
 })
