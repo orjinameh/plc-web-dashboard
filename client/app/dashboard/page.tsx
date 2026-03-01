@@ -6,6 +6,8 @@ import StatusCard from '@/components/StatusCard'
 import RealtimeChart from '@/components/RealtimeChart'
 import AlarmTable from '@/components/AlarmTable'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { isAuthenticated, logout } from '@/lib/auth'
 
 type DataPoint = {
   time: string
@@ -26,6 +28,13 @@ export default function Dashboard() {
   const [pressureHistory, setPressureHistory] = useState<DataPoint[]>([])
   const [beltHistory, setBeltHistory] = useState<DataPoint[]>([])
   const [alarmLog, setAlarmLog] = useState<AlarmEntry[]>([])
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push('/login')
+    }
+  }, [])
 
   useEffect(() => {
     connectWebSocket(
@@ -90,6 +99,12 @@ export default function Dashboard() {
           >
             📊 View History
           </Link>
+          <button
+            onClick={logout}
+            className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+          >
+            Logout
+          </button>
           <div className="flex items-center gap-2">
             <div className={`h-3 w-3 rounded-full ${connected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
             <span className={`text-sm font-medium ${connected ? 'text-green-600' : 'text-red-600'}`}>

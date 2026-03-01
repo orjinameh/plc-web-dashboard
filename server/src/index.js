@@ -15,14 +15,14 @@ const server = http.createServer(app)
 
 app.use(express.json())
 app.use(cors())
+const { register, login, protect } = require('./auth')
 
-// Health check
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok' })
-})
+// Auth routes
+app.post('/api/auth/register', register)
+app.post('/api/auth/login', login)
 
-// Historical data endpoint
-app.get('/api/history', async (req, res) => {
+// Protect history route
+app.get('/api/history', protect, async (req, res) => {
   try {
     const { PlcData } = require('./db')
     const history = await PlcData
@@ -34,6 +34,12 @@ app.get('/api/history', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch history' })
   }
 })
+
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' })
+})
+
 
 const PORT = process.env.PORT || 4000
 
