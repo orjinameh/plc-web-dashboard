@@ -36,8 +36,10 @@ const readPLCData = async () => {
     // Register 1 = pressure
     // Register 2 = belt speed
     // Register 3 = item count
-    const registers = await client.readHoldingRegisters(0, 4)
+    //const registers = await client.readHoldingRegisters(0, 4)
 
+    const registers = await client.readInputRegisters(0, 4)
+    
     plcState = {
       temperature: registers.data[0] / 10, // e.g. 254 → 25.4°C
       pressure: registers.data[1] / 100,   // e.g. 120 → 1.20 bar
